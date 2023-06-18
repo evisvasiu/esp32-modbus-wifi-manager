@@ -1,10 +1,16 @@
 #include "EEPROM.h"
 #include "HTML.h"
 #include <WebServer.h>
-#include "modbus.h"
+#include <ModbusIP_ESP8266.h>
 
 WebServer server(80);
 #include "WiFiManager.h"
+
+
+//ModbusIP object
+ModbusIP mb;
+
+long ts;
 
 void setup() {
   pinMode(2, OUTPUT);
@@ -17,26 +23,26 @@ void setup() {
     while(loadWIFICredsForm());
 
   }
-
-
-  // Define and start RTU server
-  //MBserver.registerWorker(1, READ_HOLD_REGISTER, &FC03);      // FC=03 for serverID=1
-  MBserver.registerWorker(1, READ_INPUT_REGISTER, &FC03);     // FC=04 for serverID=1
-  MBserver.start(502, 1, 20000);
-
+   mb.server();		//Start Modbus IP
+  mb.addIreg(0);
+  ts = millis();
 }
 
 
 void loop() {
+  mb.task();
   if(digitalRead(15) == HIGH){
     Serial.println("Wiping WiFi credentials from memory...");
     wipeEEPROM();
     while(loadWIFICredsForm());
   }
-  digitalWrite(2,HIGH);
-  delay(1000);
-  digitalWrite(2,LOW);
-  delay(1000);
+
+   if (millis() > ts + 100) {
+       ts = millis();
+       //Setting raw value (0-1024)
+       mb.Ireg(0, analogRead(34));
+
+   }
 
     static unsigned long lastMillis = 0;
   if (millis() - lastMillis > 10000) {
