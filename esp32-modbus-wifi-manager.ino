@@ -50,5 +50,5 @@ void wipeEEPROM(){
   for(int i=0;i<400;i++){
     EEPROM.writeByte(i,0);
   }
-  EEPROM.commit();
+  EEPROM.commit(); 
 }
