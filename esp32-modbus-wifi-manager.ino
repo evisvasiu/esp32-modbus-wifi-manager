@@ -40,54 +40,64 @@ void setup() {
   
   mb.server();		//Start Modbus IP
 
+  /*
+  Read Coil: 0
+  Discrete Inputs : 100
+  Holding registers : 200
+  Input registers : 300
+  */
+
   for (int i=0;i<40;i++){
-  int temp_value = pinconfig[i];
-    switch (temp_value) {
-    case 0:
+    
+    if (pinconfig[i] == 0){
     //digital input
     pinMode(i, INPUT);
+    }
 
-    case 1:
+    else if (pinconfig[i] == 1){
     //digital output
     pinMode(i, OUTPUT);
-
-    case 4:
-    //PWM, 10kHz, 12bit. only high speed channel
-     ledcSetup(i, 10000, 12);
-
-    switch (i){
-      case 4: 
-      ledcAttachPin(4, 0);
-      case 13:
-      ledcAttachPin(13, 2);
-      case 18:
-      ledcAttachPin(18, 4);
-      case 19:
-      ledcAttachPin(19, 6);
-      break;
-      }
-    break;
     }
-  }
 
+    else if (pinconfig[4] == 4){
+    //PWM, 10kHz, 12bit. only high speed channel
+    ledcSetup(i, 10000, 12);
+
+      if (i == 4){
+        ledcAttachPin(4, 0);
+      }
+      
+      else if (i == 13) {
+      ledcAttachPin(13, 2);
+      }
+
+      else if (i == 18) {
+      ledcAttachPin(18, 4);
+      }
+      else if (i == 19){
+      ledcAttachPin(19, 6);
+      }
+    } 
+  }
 
   //asigning temporary values to output pins for debug purposes
   for (int i = 0; i<40; i++){
+    
+    mb.addCoil(i);
+    mb.addIsts(100+i);
+    mb.addHreg(200+i);
+    mb.addIreg(300+i);
 
-    mb.addIreg(i+100);
-    mb.addHreg(i);
     if (pinconfig[i] < 5 ){
       //33333 is initial value for debub for pins in use
       pinvalues[i] = 33333;
-      mb.Ireg(100+i, 33333);
       if (pinconfig[i] == 1 || pinconfig[i]== 3 || pinconfig[i] == 4){
         pinctrlvalues[i] = 33333;
       }
     } 
     else {
-      //12345 is value assigned to unused pins
+      //22222 is value assigned to unused pins
       pinvalues[i] = 22222;
-      mb.Ireg(100+i, 22222);
       pinctrlvalues[i] = 22222;
     }
 
@@ -98,6 +108,7 @@ void setup() {
 void loop() {
 
   mb.task();
+
   //modbus refresh rate
   if (millis() > ts + 100) {
     ts = millis();
@@ -105,35 +116,44 @@ void loop() {
     for (int i = 0; i<40; i++){
 
       if (pinconfig[i] == 0){
+        
         //this pin is digital input
-        pinvalues[i] = digitalRead(i);
-        mb.Ireg(100+i, pinvalues[i]);
+        bool binput = (bool)digitalRead(i);
+        pinvalues[i] = (int)binput;
+        mb.Ists(100+i, binput);
       }
+
       else if (pinconfig[i] == 1){
         //this pin is digital output
-        pinctrlvalues[i] = mb.Hreg(i);
-        pinvalues[i] = pinctrlvalues[i];
-        digitalWrite(i, pinvalues[i]);
-        mb.Ireg(100+i, pinvalues[i]);
+        bool boutput = (int)mb.Coil(i);
+        pinctrlvalues[i] = (int)boutput;
+        pinvalues[i] = (int)boutput;
+        digitalWrite(i, boutput);
       }  
+
       else if (pinconfig[i] == 2) {
         //this pin is analog input
-        pinvalues[i] = analogRead(i);
-        mb.Ireg(100+i, pinvalues[i]);
+        int itempinput = analogRead(i);
+        pinvalues[i] = itempinput;
+        mb.Ireg(300+i, itempinput);
       }
+
       else if (pinconfig[i] == 3) {
         //this pin is analog output 8bit
-        pinctrlvalues[i] = mb.Hreg(i);
-        pinvalues[i] = pinctrlvalues[i];
-        dacWrite(i, pinvalues[i]);
-        mb.Ireg(100+i, pinvalues[i]);
+        int itempoutput = mb.Hreg(i);
+        pinctrlvalues[i] = itempoutput;
+        pinvalues[i] = itempoutput;
+        dacWrite(i, itempoutput);
+        mb.Ireg(200+i, itempoutput);
       }
+
       else if (pinconfig[i] == 4) {
-        //this pin is PWM
-        pinctrlvalues[i] = mb.Hreg(i);
-        pinvalues[i] = pinctrlvalues[i];
-        ledcWrite(i, pinvalues[i]); //12bit
-        mb.Ireg(100+i, pinvalues[i]);
+        //this pin is PWM. 
+        int itempoutput = mb.Hreg(i);
+        pinctrlvalues[i] = itempoutput;
+        pinvalues[i] = itempoutput;
+        ledcWrite(i, itempoutput); //12bit
+        mb.Ireg(200+i, itempoutput);
       }
 
     }
@@ -153,7 +173,6 @@ void loop() {
       Serial.println();*/
     }
 
-  
   if(digitalRead(15) == HIGH){
     Serial.println("Wiping WiFi credentials from memory...");
     wipeEEPROM();
