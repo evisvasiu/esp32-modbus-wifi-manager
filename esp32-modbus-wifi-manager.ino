@@ -73,11 +73,12 @@ void setup() {
   //asigning temporary values to output pins for debug purposes
   for (int i = 0; i<40; i++){
 
-    mb.addIreg(i);
+    mb.addIreg(i+100);
     mb.addHreg(i);
     if (pinconfig[i] < 5 ){
       //33333 is initial value for debub for pins in use
       pinvalues[i] = 33333;
+      mb.Ireg(100+i, 33333);
       if (pinconfig[i] == 1 || pinconfig[i]== 3 || pinconfig[i] == 4){
         pinctrlvalues[i] = 33333;
       }
@@ -85,7 +86,7 @@ void setup() {
     else {
       //12345 is value assigned to unused pins
       pinvalues[i] = 22222;
-      mb.Ireg(i, 22222);
+      mb.Ireg(100+i, 22222);
       pinctrlvalues[i] = 22222;
     }
 
@@ -97,7 +98,7 @@ void loop() {
 
   mb.task();
   //modbus refresh rate
-  if (millis() > ts + 100) {
+  if (millis() > ts + 500) {
     ts = millis();
 
     for (int i = 0; i<40; i++){
@@ -105,33 +106,33 @@ void loop() {
       if (pinconfig[i] == 0){
         //this pin is digital input
         pinvalues[i] = digitalRead(i);
-        mb.Ireg(i, pinvalues[i]);
+        mb.Ireg(100+i, pinvalues[i]);
       }
       else if (pinconfig[i] == 1){
         //this pin is digital output
         pinctrlvalues[i] = mb.Hreg(i);
         pinvalues[i] = pinctrlvalues[i];
         digitalWrite(i, pinvalues[i]);
-        mb.Ireg(i, pinvalues[i]);
+        mb.Ireg(100+i, pinvalues[i]);
       }  
       else if (pinconfig[i] == 2) {
         //this pin is analog input
         pinvalues[i] = analogRead(i);
-        mb.Ireg(i, pinvalues[i]);
+        mb.Ireg(100+i, pinvalues[i]);
       }
       else if (pinconfig[i] == 3) {
         //this pin is analog output 8bit
         pinctrlvalues[i] = mb.Hreg(i);
         pinvalues[i] = pinctrlvalues[i];
         dacWrite(i, pinvalues[i]);
-        mb.Ireg(i, pinvalues[i]);
+        mb.Ireg(100+i, pinvalues[i]);
       }
       else if (pinconfig[i] == 4) {
         //this pin is PWM
         pinctrlvalues[i] = mb.Hreg(i);
         pinvalues[i] = pinctrlvalues[i];
         ledcWrite(i, pinvalues[i]); //12bit
-        mb.Ireg(i, pinvalues[i]);
+        mb.Ireg(100+i, pinvalues[i]);
       }
 
     }
