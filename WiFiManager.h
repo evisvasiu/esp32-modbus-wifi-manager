@@ -172,14 +172,14 @@ bool loadWIFICredsForm(){
 bool CheckWIFICreds(){
   Serial.println("Checking WIFI credentials");
   String s = EEPROM.readString(100);
-  Serial.println(s);
   String p = EEPROM.readString(130);
+
+  if(s.length() < 1 && p.length() < 1){
+    return false;
+  }
   String ipstring = EEPROM.readString(160);
   String gatewaystring = EEPROM.readString(180);
 
-
-
-//All GPIO pinmode status placed in array
 
 
   //#if DEBUG
@@ -209,8 +209,8 @@ bool CheckWIFICreds(){
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
-  String gpio = EEPROM.readString(300);
-  Serial.println(gpio);
+  return true;
+
 }
 
 void wipeEEPROM(){

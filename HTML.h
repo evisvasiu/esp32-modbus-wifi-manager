@@ -125,8 +125,7 @@ const char INDEX_HTML[] PROGMEM = R"=====(
                 <select name="pin27" id="pin27"style="width: 100px;">
                     <option value="5">Unused</option> 
                     <option value="0">Digital Input</option>
-                    <option value="1">Digital Output</option>
-                    <option value="4">PWM</option>       
+                    <option value="1">Digital Output</option>     
                 </select>
                 <br>
                 <label for="pin19">19:</label>
@@ -141,8 +140,7 @@ const char INDEX_HTML[] PROGMEM = R"=====(
                     <option value="5">Unused</option> 
                     <option value="0">Digital Input</option>
                     <option value="1">Digital Output</option>
-                    <option value="2">Analog Input</option>
-                    <option value="4">PWM</option>                  
+                    <option value="2">Analog Input</option>          
                 </select>
                 <br>
                 <label for="pin23">23:</label>
@@ -150,7 +148,6 @@ const char INDEX_HTML[] PROGMEM = R"=====(
                     <option value="5">Unused</option> 
                     <option value="0">Digital Input</option>
                     <option value="1">Digital Output</option>
-                    <option value="4">PWM</option> 
                 </select> &nbsp
                 <label for="pin33">33:</label>
                 <select name="pin33" id="pin33"style="width: 100px;">
@@ -158,7 +155,6 @@ const char INDEX_HTML[] PROGMEM = R"=====(
                     <option value="0">Digital Input</option>
                     <option value="1">Digital Output</option>
                     <option value="2">Analog Input</option>
-                    <option value="4">PWM</option>
                 </select>
                 <br>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp 
                 <label for="pin34">34:</label>

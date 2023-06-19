@@ -17,29 +17,43 @@ int pinctrlvalues[40];
 
 
 void setup() {
-  EEPROM.begin(400);
-  Serial.begin(115200);
-  //reading stored pin configuration from EEPROM
-  int test_print = EEPROM.read(51);
 
+  Serial.begin(115200);
+  EEPROM.begin(400);
+  pinMode(15, INPUT); //erasing EEPROM
+
+  
+  if(!CheckWIFICreds()){
+    Serial.println("No WIFI credentials stored in memory. Loading HTML form...");
+    while(loadWIFICredsForm());
+  }
+
+
+  //reading and printing stored pin configuration from EEPROM
+  Serial.println("Pin configuration:");
   for (int i=0;i<40;i++){
     pinconfig[i] = EEPROM.read(i+50);
     Serial.print(EEPROM.read(i+50));
   }
 
+  
+  mb.server();		//Start Modbus IP
+
   for (int i=0;i<40;i++){
   int temp_value = pinconfig[i];
-  Serial.print(temp_value);
     switch (temp_value) {
     case 0:
     //digital input
     pinMode(i, INPUT);
+
     case 1:
     //digital output
     pinMode(i, OUTPUT);
+
     case 4:
-    //PWM, 5000Hz, 10bit
-     ledcSetup(i, 5000, 10);
+    //PWM, 10kHz, 12bit. only high speed channel
+     ledcSetup(i, 10000, 12);
+
     switch (i){
       case 4: 
       ledcAttachPin(4, 0);
@@ -49,14 +63,6 @@ void setup() {
       ledcAttachPin(18, 4);
       case 19:
       ledcAttachPin(19, 6);
-      case 23:
-      ledcAttachPin(23, 8);
-      case 27:
-      ledcAttachPin(27, 10);
-      case 32:
-      ledcAttachPin(32, 12);
-      case 33:
-      ledcAttachPin(33, 14);
       break;
       }
     break;
@@ -64,89 +70,93 @@ void setup() {
   }
 
 
-  pinMode(15,INPUT); //erase EEPROM
-  
-  
-
-  if(!CheckWIFICreds()){
-    Serial.println("No WIFI credentials stored in memory. Loading form...");
-    digitalWrite(2,HIGH);
-    while(loadWIFICredsForm());
-  }
-
-  mb.server();		//Start Modbus IP
-  //adding inputs to input registers
-  for (int i = 0; i<40; i++){
-    mb.addIreg(i); 
-  }
-  mb.addHreg(100);
-  
-  ts = millis();
-
   //asigning temporary values to output pins for debug purposes
   for (int i = 0; i<40; i++){
 
-    if (pinconfig[i] == 1 || pinconfig[i] == 1 ||pinconfig[i] == 4){
-      //11111 is default value for analogout and pwm
-      pinvalues[i] = 11111;
+    mb.addIreg(i);
+    mb.addHreg(i);
+    if (pinconfig[i] < 5 ){
+      //33333 is initial value for debub for pins in use
+      pinvalues[i] = 33333;
+      if (pinconfig[i] == 1 || pinconfig[i]== 3 || pinconfig[i] == 4){
+        pinctrlvalues[i] = 33333;
+      }
     } 
     else {
-      //12345 is value assigned to non used pins
-      pinvalues[i] = 12345;
+      //12345 is value assigned to unused pins
+      pinvalues[i] = 22222;
+      mb.Ireg(i, 22222);
+      pinctrlvalues[i] = 22222;
     }
 
   }
-
+  ts = millis();
 }
 
 void loop() {
 
-  //Reading analog values
+  mb.task();
+  //modbus refresh rate
+  if (millis() > ts + 100) {
+    ts = millis();
+
     for (int i = 0; i<40; i++){
 
       if (pinconfig[i] == 0){
         //this pin is digital input
         pinvalues[i] = digitalRead(i);
+        mb.Ireg(i, pinvalues[i]);
       }
       else if (pinconfig[i] == 1){
         //this pin is digital output
+        pinctrlvalues[i] = mb.Hreg(i);
         pinvalues[i] = pinctrlvalues[i];
         digitalWrite(i, pinvalues[i]);
+        mb.Ireg(i, pinvalues[i]);
       }  
       else if (pinconfig[i] == 2) {
         //this pin is analog input
         pinvalues[i] = analogRead(i);
+        mb.Ireg(i, pinvalues[i]);
       }
       else if (pinconfig[i] == 3) {
-        //this pin is analog output
+        //this pin is analog output 8bit
+        pinctrlvalues[i] = mb.Hreg(i);
         pinvalues[i] = pinctrlvalues[i];
-        dacWrite(i, pinvalues[i]); //8bit
+        dacWrite(i, pinvalues[i]);
+        mb.Ireg(i, pinvalues[i]);
       }
       else if (pinconfig[i] == 4) {
         //this pin is PWM
+        pinctrlvalues[i] = mb.Hreg(i);
         pinvalues[i] = pinctrlvalues[i];
-        ledcWrite(i, pinvalues[i]); //10bit
-      }
-
-    }
-
-    mb.task();
-
-   if (millis() > ts + 100) {
-      ts = millis();
-      for (int i = 0; i<40; i++){
-       //Setting raw value (0-1024)
+        ledcWrite(i, pinvalues[i]); //12bit
         mb.Ireg(i, pinvalues[i]);
-        
       }
+
+    }
+/*
+      Serial.println("Input registers:");
+      for (int i = 0; i<40; i++){
+        Serial.print(pinvalues[i]);
+        Serial.print(" ");
+      }
+      Serial.println();
+
+      Serial.println("Hold registers:");
+      for (int i = 0; i<40; i++){
+        Serial.print(pinctrlvalues[i]);
+        Serial.print(" ");
+      }
+      Serial.println();*/
     }
 
+  
   if(digitalRead(15) == HIGH){
     Serial.println("Wiping WiFi credentials from memory...");
     wipeEEPROM();
     while(loadWIFICredsForm());
   }
-  Serial.println(mb.Hreg(100));
 }
 
 
