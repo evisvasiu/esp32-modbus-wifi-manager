@@ -99,7 +99,7 @@ void loop() {
 
   mb.task();
   //modbus refresh rate
-  if (millis() > ts + 500) {
+  if (millis() > ts + 100) {
     ts = millis();
 
     for (int i = 0; i<40; i++){
