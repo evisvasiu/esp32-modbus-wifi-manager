@@ -82,6 +82,8 @@ bool writeToMemory(String ssid, String pass, String ipstring, String gatewaystri
   EEPROM.write(89,pin39.toInt());
 
   delay(100);
+  
+
   String s = EEPROM.readString(100);
   String p = EEPROM.readString(130);
   //#if DEBUG
@@ -175,17 +177,10 @@ bool CheckWIFICreds(){
   String ipstring = EEPROM.readString(160);
   String gatewaystring = EEPROM.readString(180);
 
+
+
 //All GPIO pinmode status placed in array
-int gpiopins[40];
-  for (int i=0;i<40;i++){
-    gpiopins[i] = EEPROM.read(i+50);
-  }
 
-for (int i=0;i<40;i++){
-
-Serial.print(gpiopins[i]);
-
-}
 
   //#if DEBUG
   Serial.print("Found credentials: ");
@@ -203,7 +198,7 @@ Serial.print(gpiopins[i]);
   Serial.println(s);
 
   WiFi.begin(s.c_str(), p.c_str());
-int i = 0;
+  int i = 0;
   while ((WiFi.status() != WL_CONNECTED) && (i < 20 )) {
     delay(500);
     i++;
@@ -218,6 +213,12 @@ int i = 0;
   Serial.println(gpio);
 }
 
+void wipeEEPROM(){
+  for(int i=0;i<400;i++){
+    EEPROM.writeByte(i,0);
+  }
+  EEPROM.commit(); 
+}
 
 
 
