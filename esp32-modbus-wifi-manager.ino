@@ -34,6 +34,7 @@ void setup() {
   for (int i=0;i<40;i++){
     pinconfig[i] = EEPROM.read(i+50);
     Serial.print(EEPROM.read(i+50));
+    Serial.print(" ");
   }
 
   
