@@ -32,4 +32,4 @@ Wifi manager: https://github.com/tzapu/WiFiManager
   - Resolution 12 bit
   - Frequency 10kHz
  
-  ![Screenshot](/images/screenshot.png)
+  ![Screenshot](/images/screenshot.jpeg)
