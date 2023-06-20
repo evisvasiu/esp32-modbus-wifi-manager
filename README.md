@@ -5,6 +5,7 @@ Modbus: https://github.com/emelianov/modbus-esp8266
 Wifi manager: https://github.com/tzapu/WiFiManager
 
 ### Usage:
+* Connect for a second pin 15 to GND to start Wifi AP mode.
 * Connect to Access Point with SSID: "ESP32-ModbusTCP", Key: 12345678
 * Go to 192.168.4.1 on your preferred browser
 * Select pinMode options by the dropdown list for each pin. "Unused" is the default option
