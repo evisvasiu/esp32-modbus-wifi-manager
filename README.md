@@ -24,6 +24,8 @@ Tested on TIA Portal, Codesys and Twincat3.
   - connected to Analog Output (DAC), PWM pins
 * Read Input Registers FC-04: 300 - 339 (Siemens: 30301 - 30340)
   - connected to Analog Inputs
+* Port: 502
+* Device ID: 1
  
 ### Signal parameters  
 * Analog Inputs:
