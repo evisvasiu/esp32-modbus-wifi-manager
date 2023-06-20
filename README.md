@@ -2,7 +2,8 @@
 
 ### Based on the following libraries
 Modbus: https://github.com/emelianov/modbus-esp8266  
-Wifi manager: https://github.com/tzapu/WiFiManager
+Wifi manager: https://github.com/tzapu/WiFiManager  
+Programmed with Arduino IDE
 
 ### Usage:
 * Connect for a second pin 15 to GND to start Wifi AP mode.
