@@ -31,3 +31,5 @@ Wifi manager: https://github.com/tzapu/WiFiManager
 * PWM:
   - Resolution 12 bit
   - Frequency 10kHz
+ 
+  ![Screenshot](images/screenshot.png)
