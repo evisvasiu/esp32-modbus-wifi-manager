@@ -7,7 +7,7 @@ Programmed with Arduino IDE.
 Tested on TIA Portal, Codesys and Twincat3.
 
 ### Usage:
-* Connect for a second pin 15 to GND to start Wifi AP mode.
+* Put pin 15 as LOW for a second to start Wifi AP mode.
 * Connect to Access Point with SSID: "ESP32-ModbusTCP", Key: 12345678
 * Go to 192.168.4.1 on your preferred browser
 * Select pinMode options by the dropdown list for each pin. "Unused" is the default option
