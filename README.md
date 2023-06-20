@@ -1,4 +1,4 @@
-# Modbus TCP on ESP32 configurable by Wifi interface
+# Portable ESP32 I/O device with Modbus-TCP + configuration interface
 
 ### Based on the following libraries
 Modbus: https://github.com/emelianov/modbus-esp8266  
