@@ -9,7 +9,7 @@ Wifi manager: https://github.com/tzapu/WiFiManager
 * Go to 192.168.4.1 on your preferred browser
 * Select pinMode options by the dropdown list for each pin. "Unused" is the default option
 * Write your preferred static IP and the Gateway.
-* That's all. 
+* Board will restart instantly after saving and be ready to connect to any Modbus-TCP client. 
 
 ## Notes: 
 ### Modbus functions and addresses:  
