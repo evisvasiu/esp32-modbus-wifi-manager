@@ -1,4 +1,4 @@
-# Modbus TCP on ESP32 configurable by Wifi interface
+# Portable firmware that makes ESP32 as a I/O device with Modbus-TCP + configuration interface
 
 ### Based on the following libraries
 Modbus: https://github.com/emelianov/modbus-esp8266  
@@ -36,4 +36,11 @@ Tested on TIA Portal, Codesys and Twincat3.
   - Resolution 12 bit
   - Frequency 10kHz
  
-  ![Screenshot](/images/screenshot.jpeg)
+## Flashing methods
+* Arduino IDE
+* ESP flash tool
+  - Put the board in "download mode" by keeping boot button pressed when connecting USB cable.
+  - Load the binary file and set the offset as 0x10000 (default for ESP32)
+  - Choose COM port and press START
+ 
+  ![Screenshot](/build/flashing.PNG)
