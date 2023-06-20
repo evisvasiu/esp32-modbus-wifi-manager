@@ -144,7 +144,7 @@ bool loadWIFICredsForm(){
   String s = EEPROM.readString(100);
   String p = EEPROM.readString(130);
 
-  const char* APname = "ESP32-ModbusTCP";
+  const char* APname = "EvisLAB-ESP32";
   const char* password = "12345678";
   Serial.println("Setting Access Point...");
   WiFi.softAP(APname, password);

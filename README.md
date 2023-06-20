@@ -8,7 +8,7 @@ Tested on TIA Portal, Codesys and Twincat3.
 
 ### Usage:
 * Put pin 15 as LOW for a second to start Wifi AP mode.
-* Connect to Access Point with SSID: "ESP32-ModbusTCP", Key: 12345678
+* Connect to Access Point with SSID: "EvisLAB-ESP32", Key: 12345678
 * Go to 192.168.4.1 on your preferred browser
 * Select pinMode options by the dropdown list for each pin. "Unused" is the default option
 * Write your preferred static IP and the Gateway.
@@ -16,7 +16,7 @@ Tested on TIA Portal, Codesys and Twincat3.
 
 ## Notes: 
 ### Modbus functions and addresses:  
-* Write coils FC-01: 0 - 39 (Siemens: 0 - 39)
+* Write coils FC-01: 0 - 39 (Siemens: 1 - 40)
   - connected to Digital Outputs
 * Read inputs FC-02: 100 - 139 (Siemens: 10101 - 10140)
   - connected to Digital Inputs
