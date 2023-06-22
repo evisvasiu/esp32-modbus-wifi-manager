@@ -16,11 +16,11 @@ Tested on TIA Portal, Codesys and Twincat3.
 
 ## Notes: 
 ### Modbus functions and addresses:  
-* Write coils FC-01: 0 - 39 (Siemens: 1 - 40)
+* Write coils FC-15: 0 - 39 (Siemens: 1 - 40)
   - connected to Digital Outputs
 * Read inputs FC-02: 100 - 139 (Siemens: 10101 - 10140)
   - connected to Digital Inputs
-* Write Holding Registers FC-03: 200 - 239 (Siemens: 40201 - 40240)
+* Write Holding Registers FC-16: 200 - 239 (Siemens: 40201 - 40240)
   - connected to Analog Output (DAC), PWM pins
 * Read Input Registers FC-04: 300 - 339 (Siemens: 30301 - 30340)
   - connected to Analog Inputs
