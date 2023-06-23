@@ -140,20 +140,18 @@ void loop() {
 
       else if (pinconfig[i] == 3) {
         //this pin is analog output 8bit
-        int itempoutput = mb.Hreg(i);
+        int itempoutput = (int)mb.Hreg(200+i);
         pinctrlvalues[i] = itempoutput;
         pinvalues[i] = itempoutput;
         dacWrite(i, itempoutput);
-        mb.Ireg(200+i, itempoutput);
       }
 
       else if (pinconfig[i] == 4) {
         //this pin is PWM. 
-        int itempoutput = mb.Hreg(i);
+        int itempoutput = (int)mb.Hreg(200+i);
         pinctrlvalues[i] = itempoutput;
         pinvalues[i] = itempoutput;
         ledcWrite(i, itempoutput); //12bit
-        mb.Ireg(200+i, itempoutput);
       }
 
     }
