@@ -14,9 +14,16 @@ long ts;
 int pinvalues[40];
 int pinconfig[40];
 int pinctrlvalues[40];
+int pwmchannels[20];
+
 
 
 void setup() {
+
+  pwmchannels[4] = 0;
+  pwmchannels[13] = 2;
+  pwmchannels[18] = 4;
+  pwmchannels[19] = 19;
 
   Serial.begin(115200);
   EEPROM.begin(400);
@@ -46,6 +53,7 @@ void setup() {
   Holding registers : 200
   Input registers : 300
   */
+  
 
   for (int i=0;i<40;i++){
     
@@ -61,22 +69,26 @@ void setup() {
 
     else if (pinconfig[4] == 4){
     //PWM, 10kHz, 12bit. only high speed channel
-    ledcSetup(i, 10000, 12);
 
       if (i == 4){
-        ledcAttachPin(4, 0);
+      ledcSetup(0, 10000, 12);
+      ledcAttachPin(4, 0);
       }
       
       else if (i == 13) {
+      ledcSetup(2, 10000, 12);
       ledcAttachPin(13, 2);
       }
 
       else if (i == 18) {
+      ledcSetup(4, 10000, 12);
       ledcAttachPin(18, 4);
       }
       else if (i == 19){
+      ledcSetup(6, 10000, 12);
       ledcAttachPin(19, 6);
       }
+
     } 
   }
 
@@ -151,7 +163,7 @@ void loop() {
         int itempoutput = (int)mb.Hreg(200+i);
         pinctrlvalues[i] = itempoutput;
         pinvalues[i] = itempoutput;
-        ledcWrite(i, itempoutput); //12bit
+        ledcWrite(pwmchannels[i], itempoutput); //12bit
       }
 
     }
