@@ -11,15 +11,15 @@ WebServer server(80);
 ModbusIP mb;
 long ts;
 
-int pinvalues[40];
-int pinconfig[40];
-int pinctrlvalues[40];
-int pwmchannels[20];
-
+int pinvalues[40];  //Storing all current pin values to this array
+int pinconfig[40]; //pin configuration
+int pinctrlvalues[40]; //Holding register values 
+int pwmchannels[20]; //Designated PWM channel addresses
 
 
 void setup() {
 
+//Attaching PWM channels to the 4 designated PWM pins. 
   pwmchannels[4] = 0;
   pwmchannels[13] = 2;
   pwmchannels[18] = 4;
@@ -36,7 +36,7 @@ void setup() {
   }
 
 
-  //reading and printing stored pin configuration from EEPROM
+  //reading and printing pin configuration stored in EEPROM
   Serial.println("Pin configuration:");
   for (int i=0;i<40;i++){
     pinconfig[i] = EEPROM.read(i+50);
@@ -69,23 +69,20 @@ void setup() {
 
     else if (pinconfig[4] == 4){
     //PWM, 10kHz, 12bit. only high speed channel
+    ledcSetup(pwmchannels[i], 10000, 12);
 
       if (i == 4){
-      ledcSetup(0, 10000, 12);
       ledcAttachPin(4, 0);
       }
       
       else if (i == 13) {
-      ledcSetup(2, 10000, 12);
       ledcAttachPin(13, 2);
       }
 
       else if (i == 18) {
-      ledcSetup(4, 10000, 12);
       ledcAttachPin(18, 4);
       }
       else if (i == 19){
-      ledcSetup(6, 10000, 12);
       ledcAttachPin(19, 6);
       }
 
