@@ -64,11 +64,8 @@ void setup() {
     //PWM, 10kHz, 12bit. only high speed channel
     ledcSetup(pwmchannels[i], 10000, 12);
     ledcAttachPin(i, pwmchannels[i]);
-    } 
-  }
+    }
 
-  for (int i = 0; i<40; i++){
-    
     /* 
     Register offsets:
     Write Coils: 0
@@ -76,7 +73,7 @@ void setup() {
     Holding registers : 200
     Input registers : 300
     */
-    
+
     mb.addCoil(i);
     mb.addIsts(100+i);
     mb.addHreg(200+i);
@@ -86,10 +83,6 @@ void setup() {
     if (pinconfig[i] < 5 ){
       //33333 is the initial value. (Assigned for debugging)
       pinvalues[i] = 33333;
-
-      if (pinconfig[i] == 1 || pinconfig[i]== 3 || pinconfig[i] == 4){
-        pinctrlvalues[i] = 33333;
-      }
     }
 
     else {
@@ -98,7 +91,7 @@ void setup() {
       pinctrlvalues[i] = 22222;
     }
   }
-
+    
   ts = millis();
 }
 
