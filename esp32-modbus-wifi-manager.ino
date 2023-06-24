@@ -23,7 +23,7 @@ void setup() {
   pwmchannels[4] = 0;
   pwmchannels[13] = 2;
   pwmchannels[18] = 4;
-  pwmchannels[19] = 19;
+  pwmchannels[19] = 6;
 
   Serial.begin(115200);
   EEPROM.begin(400);
@@ -47,13 +47,6 @@ void setup() {
   
   mb.server();		//Start Modbus IP
 
-  /*
-  Read Coil: 0
-  Discrete Inputs : 100
-  Holding registers : 200
-  Input registers : 300
-  */
-  
 
   for (int i=0;i<40;i++){
     
@@ -67,50 +60,46 @@ void setup() {
     pinMode(i, OUTPUT);
     }
 
-    else if (pinconfig[4] == 4){
+    else if (pinconfig[i] == 4){
     //PWM, 10kHz, 12bit. only high speed channel
     ledcSetup(pwmchannels[i], 10000, 12);
-
-      if (i == 4){
-      ledcAttachPin(4, 0);
-      }
-      
-      else if (i == 13) {
-      ledcAttachPin(13, 2);
-      }
-
-      else if (i == 18) {
-      ledcAttachPin(18, 4);
-      }
-      else if (i == 19){
-      ledcAttachPin(19, 6);
-      }
-
+    ledcAttachPin(i, pwmchannels[i]);
     } 
   }
 
-  //asigning temporary values to output pins for debug purposes
+
   for (int i = 0; i<40; i++){
+    
+    /* 
+    Register offsets:
+    Write Coils: 0
+    Discrete Inputs : 100
+    Holding registers : 200
+    Input registers : 300
+    */
     
     mb.addCoil(i);
     mb.addIsts(100+i);
     mb.addHreg(200+i);
     mb.addIreg(300+i);
 
+  //asigning temporary values to output pins for debugging purposes
     if (pinconfig[i] < 5 ){
-      //33333 is initial value for debub for pins in use
+      //33333 is the initial value. (Assigned for debugging)
       pinvalues[i] = 33333;
+
       if (pinconfig[i] == 1 || pinconfig[i]== 3 || pinconfig[i] == 4){
         pinctrlvalues[i] = 33333;
       }
-    } 
+    }
+
     else {
       //22222 is value assigned to unused pins
       pinvalues[i] = 22222;
       pinctrlvalues[i] = 22222;
     }
-
   }
+
   ts = millis();
 }
 
@@ -162,7 +151,6 @@ void loop() {
         pinvalues[i] = itempoutput;
         ledcWrite(pwmchannels[i], itempoutput); //12bit
       }
-
     }
 /*
       Serial.println("Input registers:");
@@ -179,11 +167,15 @@ void loop() {
       }
       Serial.println();*/
     }
+  long reset_delay = millis();
 
-  if(digitalRead(15) == HIGH){
+  while (digitalRead(15) == HIGH){
+    //3 Seconds delay to reset the board. 
+    if (millis() > reset_delay + 3000){
     Serial.println("Wiping WiFi credentials from memory...");
     wipeEEPROM();
     while(loadWIFICredsForm());
+    }
   }
 }
 
