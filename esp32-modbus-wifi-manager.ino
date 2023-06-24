@@ -1,5 +1,5 @@
 #include "EEPROM.h"
-#include "html.h"
+#include "HTML.h"
 #include <WebServer.h>
 #include <ModbusIP_ESP8266.h>
 
