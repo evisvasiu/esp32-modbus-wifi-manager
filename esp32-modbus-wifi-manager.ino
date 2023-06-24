@@ -19,7 +19,7 @@ int pwmchannels[20]; //Designated PWM channel addresses
 
 void setup() {
 
-//Attaching PWM channels to the 4 designated PWM pins. 
+//Assigning PWM channels to the 4 designated PWM pins. 
   pwmchannels[4] = 0;
   pwmchannels[13] = 2;
   pwmchannels[18] = 4;
@@ -67,7 +67,6 @@ void setup() {
     } 
   }
 
-
   for (int i = 0; i<40; i++){
     
     /* 
@@ -105,7 +104,7 @@ void setup() {
 
 void loop() {
 
-  mb.task();
+  mb.task();  //keeping modbus active
 
   //modbus refresh rate
   if (millis() > ts + 100) {
@@ -131,25 +130,25 @@ void loop() {
 
       else if (pinconfig[i] == 2) {
         //this pin is analog input
-        int itempinput = analogRead(i);
-        pinvalues[i] = itempinput;
-        mb.Ireg(300+i, itempinput);
+        int temp_value = averagingRawValues(i);
+        pinvalues[i] = temp_value;
+        mb.Ireg(300+i, temp_value);
       }
 
       else if (pinconfig[i] == 3) {
         //this pin is analog output 8bit
-        int itempoutput = (int)mb.Hreg(200+i);
-        pinctrlvalues[i] = itempoutput;
-        pinvalues[i] = itempoutput;
-        dacWrite(i, itempoutput);
+        int temp_value = (int)mb.Hreg(200+i);
+        pinctrlvalues[i] = temp_value;
+        pinvalues[i] = temp_value;
+        dacWrite(i, temp_value);
       }
 
       else if (pinconfig[i] == 4) {
         //this pin is PWM. 
-        int itempoutput = (int)mb.Hreg(200+i);
-        pinctrlvalues[i] = itempoutput;
-        pinvalues[i] = itempoutput;
-        ledcWrite(pwmchannels[i], itempoutput); //12bit
+        int temp_value = (int)mb.Hreg(200+i);
+        pinctrlvalues[i] = temp_value;
+        pinvalues[i] = temp_value;
+        ledcWrite(pwmchannels[i], temp_value); //12bit
       }
     }
 /*
@@ -167,8 +166,8 @@ void loop() {
       }
       Serial.println();*/
     }
-  long reset_delay = millis();
 
+  long reset_delay = millis();
   while (digitalRead(15) == HIGH){
     //3 Seconds delay to reset the board. 
     if (millis() > reset_delay + 3000){
@@ -179,4 +178,12 @@ void loop() {
   }
 }
 
+int averagingRawValues(int pin) {
+  int average_output = 0;
+  int max_reads = 5;
+  for (int i=0; i<max_reads; i++){
+    average_output = average_output + analogRead(pin);
+  }
 
+  return average_output / max_reads;
+}
