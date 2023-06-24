@@ -39,8 +39,8 @@ Tested on TIA Portal, Codesys and Twincat3.
 ## Flashing methods
 * Arduino IDE
 * ESP flash tool
-  - Put the board in "download mode" by keeping boot button pressed when connecting USB cable.
   - Load the binary file and set the offset as 0x10000 (default for ESP32)
-  - Choose the COM port and press START
+  - Keep the "boot" button pressed when connecting the USB cable, choose the COM port and press Start. 
+  - After flashing start, release the "boot" button. 
  
   ![Screenshot](/build/flashing.PNG)
