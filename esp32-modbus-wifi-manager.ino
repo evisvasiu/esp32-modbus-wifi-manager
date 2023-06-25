@@ -172,11 +172,11 @@ void loop() {
 }
 
 int averagingRawValues(int pin) {
-  int average_output = 0;
+  int temp_sum = 0;
   int max_reads = 5;
   for (int i=0; i<max_reads; i++){
-    average_output = average_output + analogRead(pin);
+    temp_sum = temp_sum + analogRead(pin);
   }
 
-  return average_output / max_reads;
+  return temp_sum / max_reads;
 }
