@@ -1,4 +1,4 @@
-# Portable firmware that makes ESP32 function as a I/O device with Modbus-TCP + configuration interface
+# Firmware that makes ESP32 function as a remote I/O device with Modbus-TCP + configuration interface
 
 ### Based on the following libraries
 Modbus: https://github.com/emelianov/modbus-esp8266  
@@ -40,7 +40,7 @@ Tested on TIA Portal, Codesys and Twincat3.
 * Arduino IDE
 * ESP flash tool
   - Load the binary file and set the offset as 0x10000 (default for ESP32)
-  - Keep the "boot" button pressed when connecting the USB cable, choose the COM port and press Start. 
+  - While keeping the "boot" button pressed, plug the USB cable, choose the COM port and then press Start. 
   - After flashing start, release the "boot" button. 
  
   ![Screenshot](/build/flashing.PNG)
