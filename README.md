@@ -1,4 +1,4 @@
-# Firmware that makes ESP32 function as a I/O device with Modbus-TCP + configuration interface
+# Firmware that makes ESP32 function as a remote I/O device with Modbus-TCP + configuration interface
 
 ### Based on the following libraries
 Modbus: https://github.com/emelianov/modbus-esp8266  
