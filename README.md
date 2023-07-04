@@ -4,7 +4,7 @@
 Modbus: https://github.com/emelianov/modbus-esp8266  
 Wifi manager: https://github.com/tzapu/WiFiManager  
 Programmed with Arduino IDE. 
-Tested on TIA Portal, Codesys and Twincat3.
+Tested on TIA Portal and Twincat3.
 
 ### Usage:
 * Put pin 15 as LOW for 3 seconds to start Wifi AP mode.
