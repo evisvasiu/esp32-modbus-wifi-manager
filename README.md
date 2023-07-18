@@ -44,3 +44,4 @@ Tested on TIA Portal and Twincat3.
   - After flashing start, release the "boot" button. 
  
   ![Screenshot](/build/flashing.PNG)
+  ![Screenshot](/screenshot.jpeg)
