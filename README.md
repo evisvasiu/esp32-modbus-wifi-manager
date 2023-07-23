@@ -12,7 +12,7 @@ Tested on TIA Portal and Twincat3.
 * Go to 192.168.4.1 on your preferred browser
 * Select pinMode options by the dropdown list for each pin. "Unused" is the default option
 * Write your preferred static IP and the Gateway.
-* Board will restart instantly after saving and be ready to connect to any Modbus-TCP client. 
+* Board will restart instantly after saving and be ready to connect to any Modbus-TCP master(client). 
 
 ## Notes: 
 ### Modbus functions and addresses:  
